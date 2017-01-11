@@ -110,7 +110,8 @@ public class PlayerController : MonoBehaviour
 			if (hp == 0) {
 				pac.enabled = false;
 				deadAudioSource.PlayOneShot(getDeadSound);
-				Invoke ("ResetGameScene", getDeadSound.length);
+				SceneManager.LoadScene ("Main");
+//				Invoke ("ResetGameScene", getDeadSound.length);
 			} else {
 				this.transform.localScale -= new Vector3 (0.0f, 0.3f, 0.0f);
 				this.transform.position -= new Vector3 (0.0f, 0.2f, 0.0f);

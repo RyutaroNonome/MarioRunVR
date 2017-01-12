@@ -22,15 +22,11 @@ public class PlayerAngleController : MonoBehaviour {
 		RigidBody.drag = 0f;
 		RigidBody.velocity = new Vector3(RigidBody.velocity.x, 0f, RigidBody.velocity.z);
 		RigidBody.AddForce(new Vector3(0f, JumpForce, 0f), ForceMode.Impulse);
-//		if (positionY > 2.64) {
-//			Jump = false;
-//		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		//// 9行目と11行目で取得した角度の差でJUMPを実装
-		//
 		float angleDifference = divecamera.transform.localRotation.eulerAngles.x - playerXangle;
 		playerXangle = divecamera.transform.localRotation.eulerAngles.x;
 

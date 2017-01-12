@@ -15,6 +15,7 @@ public class KuribouBody : MonoBehaviour {
 //		if (other.gameObject.name != "Player" && other.gameObject.name != "RightNoEntryArea" && other.gameObject.name != "LeftNoEntryArea") {
 //			cource *= -1;
 //		}
+		print(other.gameObject.name);
 		if (other.gameObject.name != "Player") {
 			cource *= -1;
 		}

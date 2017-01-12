@@ -39,7 +39,6 @@ public class PlayerAngleController : MonoBehaviour {
 
 		// positionY で常に現在地(Y座標)を記憶
 		positionY = transform.position.y;
-		print (positionY);
 
 		if (positionY > 2.64) {
 			Jump = false;
@@ -47,7 +46,6 @@ public class PlayerAngleController : MonoBehaviour {
 		// JUMP
 		if (30f < playerXangle && playerXangle < 90f && positionY < 2.64) {
 			Jump = true;
-
 		}
 
 		if (Jump)

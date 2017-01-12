@@ -105,7 +105,7 @@ public class PlayerController : MonoBehaviour
 	}
 
 	void OnCollisionEnter(Collision other){
-		if (other.gameObject.name == "RightLeg(KuribouBody)" || other.gameObject.name == "PakkunBody" || other.gameObject.name == "Dossun") {
+		if (other.gameObject.name == "KuribouCollider" || other.gameObject.name == "PakkunBody" || other.gameObject.name == "Dossun") {
 			hp--;
 			if (hp == 0) {
 				pac.enabled = false;

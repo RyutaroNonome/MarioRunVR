@@ -12,9 +12,10 @@ public class KuribouBody : MonoBehaviour {
 	}
 
 	void OnCollisionEnter (Collision other){
-		if (other.gameObject.name != "Player" && other.gameObject.name != "RightNoEntryArea" && other.gameObject.name != "LeftNoEntryArea") {
-			cource *= -1;
-		}else if(other.gameObject.name != "Player"){
+//		if (other.gameObject.name != "Player" && other.gameObject.name != "RightNoEntryArea" && other.gameObject.name != "LeftNoEntryArea") {
+//			cource *= -1;
+//		}
+		if (other.gameObject.name != "Player") {
 			cource *= -1;
 		}
 	}

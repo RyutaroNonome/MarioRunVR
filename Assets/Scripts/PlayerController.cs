@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
 	void Update() {
 		if (this.transform.position.y < -4) {
 			deadAudioSource.PlayOneShot(getDeadSound);
-			Invoke ("ResetGameScene", getDeadSound.length);
+			Invoke ("MainScene", getDeadSound.length);
 		}
 
 		if (this.transform.position.z > 103){
@@ -110,7 +110,8 @@ public class PlayerController : MonoBehaviour
 			if (hp == 0) {
 				pac.enabled = false;
 				deadAudioSource.PlayOneShot(getDeadSound);
-				SceneManager.LoadScene ("Main");
+				Invoke ("MainScene", getDeadSound.length);
+//				SceneManager.LoadScene ("Main");
 //				Invoke ("ResetGameScene", getDeadSound.length);
 			} else {
 				this.transform.localScale -= new Vector3 (0.0f, 0.3f, 0.0f);
@@ -126,6 +127,10 @@ public class PlayerController : MonoBehaviour
 		if (other.gameObject.tag == "Goal") {
 			StartCoroutine ("ExplodeAsGoalEffect");
 		}
+	}
+
+	void MainScene () {
+		SceneManager.LoadScene ("Main");
 	}
 
 	void ResetGameScene () {
@@ -151,7 +156,7 @@ public class PlayerController : MonoBehaviour
 			hp--;
 			if (hp == 0) {
 				deadAudioSource.PlayOneShot(getDeadSound);
-				Invoke ("ResetGameScene", getDeadSound.length);
+				Invoke ("MainScene", getDeadSound.length);
 			} else {
 				this.transform.localScale -= new Vector3 (0.0f, 0.3f, 0.0f);
 				this.transform.position -= new Vector3 (0.0f, 0.2f, 0.0f);

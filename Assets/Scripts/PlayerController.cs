@@ -17,7 +17,9 @@ public class PlayerController : MonoBehaviour
 	bool isRunning = false;
 
 	AudioClip getDeadSound;
-	AudioSource deadAudioSource;
+	AudioClip getJumpSound;
+
+	AudioSource audioSource;
 
 	Vector3 startPosition;
 
@@ -40,26 +42,28 @@ public class PlayerController : MonoBehaviour
 		killerPositions = GameObject.FindGameObjectsWithTag ("Position");
 
 		getDeadSound = Resources.Load<AudioClip>("Audio/dead.oggvorbis");
-		deadAudioSource = this.GetComponent<AudioSource>();
+		getJumpSound = Resources.Load<AudioClip>("Audio/jump");
+
+		audioSource = this.GetComponent<AudioSource>();
 
 		Vector3 goal1 = transform.position + (new Vector3 (0, 1.7f, 41f));
 		Vector3 goal2 = transform.position + (new Vector3 (0, 1.7f, 69f));
 
 		switch (achievement) {
-		case Achievement.FirstPoint:
-			this.transform.position = goal1;
+			case Achievement.FirstPoint:
+				this.transform.position = goal1;
+					break;
+			case Achievement.SecondPoint:
+				this.transform.position = goal2;
 				break;
-		case Achievement.SecondPoint:
-			this.transform.position = goal2;
-			break;
-		default:
-			break;
+			default:
+				break;
 		}
 	}
 
 	void Update() {
 		if (this.transform.position.y < -4) {
-			deadAudioSource.PlayOneShot(getDeadSound);
+			audioSource.PlayOneShot(getDeadSound);
 			Invoke ("MainScene", getDeadSound.length);
 		}
 
@@ -101,7 +105,6 @@ public class PlayerController : MonoBehaviour
 	{
 		if (Input.GetKey (KeyCode.Space) && Input.GetKey("up")) {
 			rb.AddForce (transform.forward * thrust);
-			//rb.AddForce(transform.up * thrust);
 		}
 	}
 
@@ -110,10 +113,8 @@ public class PlayerController : MonoBehaviour
 			hp--;
 			if (hp == 0) {
 				pac.enabled = false;
-				deadAudioSource.PlayOneShot(getDeadSound);
+				audioSource.PlayOneShot(getDeadSound);
 				Invoke ("MainScene", getDeadSound.length);
-//				SceneManager.LoadScene ("Main");
-//				Invoke ("ResetGameScene", getDeadSound.length);
 			} else {
 				this.transform.localScale -= new Vector3 (0.0f, 0.3f, 0.0f);
 				this.transform.position -= new Vector3 (0.0f, 0.2f, 0.0f);
@@ -156,12 +157,17 @@ public class PlayerController : MonoBehaviour
 		if (other.gameObject.name == "Dossun") {
 			hp--;
 			if (hp == 0) {
-				deadAudioSource.PlayOneShot(getDeadSound);
+				audioSource.PlayOneShot(getDeadSound);
 				Invoke ("MainScene", getDeadSound.length);
 			} else {
 				this.transform.localScale -= new Vector3 (0.0f, 0.3f, 0.0f);
 				this.transform.position -= new Vector3 (0.0f, 0.2f, 0.0f);
 			}
 		}
+	}
+
+	public void JumpSound () {
+		print ("kang");
+		audioSource.PlayOneShot(getJumpSound);
 	}
 }

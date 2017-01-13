@@ -13,15 +13,19 @@ public class PlayerAngleController : MonoBehaviour {
 
 	float positionY;
 
+	PlayerController playerController;
+
 	// Use this for initialization
 	void Start () {
 		RigidBody = GetComponent<Rigidbody>();
+		playerController = GetComponent<PlayerController> ();
 	}
 
 	void Jumping () {
 		RigidBody.drag = 0f;
 		RigidBody.velocity = new Vector3(RigidBody.velocity.x, 0f, RigidBody.velocity.z);
 		RigidBody.AddForce(new Vector3(0f, JumpForce, 0f), ForceMode.Impulse);
+		playerController.JumpSound ();
 	}
 	
 	// Update is called once per frame
@@ -29,7 +33,6 @@ public class PlayerAngleController : MonoBehaviour {
 		//// 9行目と11行目で取得した角度の差でJUMPを実装
 		float angleDifference = divecamera.transform.localRotation.eulerAngles.x - playerXangle;
 		playerXangle = divecamera.transform.localRotation.eulerAngles.x;
-
 
 		transform.position += new Vector3 (0, 0, 2f * Time.deltaTime);
 

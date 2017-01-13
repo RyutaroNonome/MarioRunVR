@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
 
 		killerPositions = GameObject.FindGameObjectsWithTag ("Position");
 
-		getDeadSound = Resources.Load<AudioClip>("Audio/dead.oggvorbis");
+		getDeadSound = Resources.Load<AudioClip>("Audio/YamatoShibou");
 		getJumpSound = Resources.Load<AudioClip>("Audio/jump");
 
 		audioSource = this.GetComponent<AudioSource>();

@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
 
 	bool isRunning = false;
 
+	bool isDead = false;
+
 	AudioClip getDeadSound;
 	AudioClip getJumpSound;
 
@@ -41,7 +43,7 @@ public class PlayerController : MonoBehaviour
 
 		killerPositions = GameObject.FindGameObjectsWithTag ("Position");
 
-		getDeadSound = Resources.Load<AudioClip>("Audio/YamatoShibou");
+		getDeadSound = Resources.Load<AudioClip>("Audio/dead");
 		getJumpSound = Resources.Load<AudioClip>("Audio/jump");
 
 		audioSource = this.GetComponent<AudioSource>();
@@ -63,13 +65,10 @@ public class PlayerController : MonoBehaviour
 
 	void Update() {
 		if (this.transform.position.y < -4) {
+			isDead = true;
 			audioSource.PlayOneShot(getDeadSound);
 			Invoke ("MainScene", getDeadSound.length);
 		}
-
-//		if (this.transform.position.z > 103){
-//			SceneManager.LoadScene ("Kuppa");
-//		}
 
 		if (this.transform.position.z > 20 && this.transform.position.z < 80) {
 			if (SceneManager.GetActiveScene ().name == "Main") {
@@ -113,6 +112,7 @@ public class PlayerController : MonoBehaviour
 			hp--;
 			if (hp == 0) {
 				pac.enabled = false;
+				isDead = true;
 				audioSource.PlayOneShot(getDeadSound);
 				Invoke ("MainScene", getDeadSound.length);
 			} else {
@@ -162,6 +162,7 @@ public class PlayerController : MonoBehaviour
 		if (other.gameObject.name == "Dossun") {
 			hp--;
 			if (hp == 0) {
+				isDead = true;
 				audioSource.PlayOneShot(getDeadSound);
 				Invoke ("MainScene", getDeadSound.length);
 			} else {
@@ -172,7 +173,10 @@ public class PlayerController : MonoBehaviour
 	}
 
 	public void JumpSound () {
-		print ("kang");
 		audioSource.PlayOneShot(getJumpSound);
+	}
+
+	public bool whetherDead () {
+		return isDead;
 	}
 }

@@ -7,10 +7,20 @@ public class SoundScript : MonoBehaviour {
 
 	private AudioSource audioSource;
 
+	public PlayerController playerController;
+
 	// Use this for initialization
 	void Start () {
 		audioSource = gameObject.GetComponent<AudioSource>();
 		audioSource.clip = mainBgm;
 		audioSource.Play ();
+	}
+
+	void Update () {
+		if (audioSource.isPlaying) {
+			if (playerController.whetherDead ()) {
+				audioSource.Stop ();
+			}
+		}
 	}
 }

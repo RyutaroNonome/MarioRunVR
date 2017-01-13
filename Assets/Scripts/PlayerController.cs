@@ -67,9 +67,9 @@ public class PlayerController : MonoBehaviour
 			Invoke ("MainScene", getDeadSound.length);
 		}
 
-		if (this.transform.position.z > 103){
-			SceneManager.LoadScene ("Kuppa");
-		}
+//		if (this.transform.position.z > 103){
+//			SceneManager.LoadScene ("Kuppa");
+//		}
 
 		if (this.transform.position.z > 20 && this.transform.position.z < 80) {
 			if (SceneManager.GetActiveScene ().name == "Main") {
@@ -128,11 +128,16 @@ public class PlayerController : MonoBehaviour
 
 		if (other.gameObject.tag == "Goal") {
 			StartCoroutine ("ExplodeAsGoalEffect");
+			Invoke("Kuppa", 2f);
 		}
 	}
 
 	void MainScene () {
 		SceneManager.LoadScene ("Main");
+	}
+
+	void KuppaScene () {
+		SceneManager.LoadScene ("Kuppa");
 	}
 
 	void ResetGameScene () {

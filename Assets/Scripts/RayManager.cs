@@ -22,8 +22,10 @@ public class RayManager : MonoBehaviour {
 		RaycastHit hit;
 
 		if (Physics.Raycast (ray, out hit)) {
-			reticle.transform.position = hit.point;
-			
+			Vector3 tmp = hit.point;
+//			tmp.z = 10f;
+			reticle.transform.position = tmp;
+
 			if (hit.transform.name == "Main" || hit.transform.name == "Kuppa") {
 				gaugeTime += Time.deltaTime * 0.01f;
 				buttonGauge.rectTransform.localPosition = Vector3.Lerp (buttonGauge.rectTransform.localPosition, new Vector3 (1400, 0, 1), gaugeTime);

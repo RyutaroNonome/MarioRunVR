@@ -10,22 +10,20 @@ public class RayManager : MonoBehaviour {
 	public int endPositionX = -4;
 	float gaugeTime;
 	Vector3 firstButtonGaugePosition;
-	LineRenderer linerenderer;
+
+	public GameObject reticle;
 
 	void Start () {
 		firstButtonGaugePosition = buttonGauge.transform.localPosition;
-		linerenderer = GetComponent<LineRenderer> ();
 	}
 
 	void Update () {
 		Ray ray = new Ray (diveCamera.transform.position, diveCamera.transform.forward);
 		RaycastHit hit;
 
-		linerenderer.SetPosition (0, transform.position);
-
 		if (Physics.Raycast (ray, out hit)) {
-			Debug.DrawLine (ray.origin, hit.point, Color.black);
-
+			reticle.transform.position = hit.point;
+			
 			if (hit.transform.name == "Main" || hit.transform.name == "Kuppa") {
 				gaugeTime += Time.deltaTime * 0.01f;
 				buttonGauge.rectTransform.localPosition = Vector3.Lerp (buttonGauge.rectTransform.localPosition, new Vector3 (1400, 0, 1), gaugeTime);
@@ -37,6 +35,5 @@ public class RayManager : MonoBehaviour {
 				SceneManager.LoadScene (hit.transform.name);
 			}
 		}
-		linerenderer.SetPosition (1, ray.origin + ray.direction * 100f);
 	}
 }

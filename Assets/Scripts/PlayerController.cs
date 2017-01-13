@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
 
 	GameObject[] killerPositions;
 
+
 	bool isRunning = false;
 
 	bool isDead = false;

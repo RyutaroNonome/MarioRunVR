@@ -19,8 +19,13 @@ public class SoundScript : MonoBehaviour {
 	void Update () {
 		if (audioSource.isPlaying) {
 			if (playerController.whetherDead ()) {
+				print ("しぼう");
 				audioSource.Stop ();
 			}
+//			if (playerController.JumpSound()) {
+//			    print ("jump");
+//				audioSource.Stop ();
+//			}
 		}
 	}
 }

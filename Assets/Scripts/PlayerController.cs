@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour 
 {
+	bool isGround = true;
 	PlayerAngleController pac;
 
 	public float thrust;
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour
 	};
 
 	Achievement achievement;
+	PlayerController playerController;
 
 	void Start() 
 	{
@@ -62,6 +64,7 @@ public class PlayerController : MonoBehaviour
 			default:
 				break;
 		}
+		playerController = GetComponent<PlayerController> ();
 	}
 
 	void Update() {
@@ -83,6 +86,10 @@ public class PlayerController : MonoBehaviour
 		}
 		if (this.transform.position.z >= 70f) {
 			achievement = Achievement.SecondPoint;
+		}
+		if (isGround == true && Input.GetKeyDown (KeyCode.Space)) {
+			playerController.JumpSound ();
+			isGround = false;
 		}
 	}
 
@@ -130,6 +137,9 @@ public class PlayerController : MonoBehaviour
 		if (other.gameObject.tag == "Goal") {
 			StartCoroutine ("ExplodeAsGoalEffect");
 			Invoke("Kuppa", 2f);
+		}
+		if (other.gameObject.transform.parent.tag == "Stage") {
+			isGround = true;
 		}
 	}
 

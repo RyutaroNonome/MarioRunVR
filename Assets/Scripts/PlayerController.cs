@@ -135,10 +135,11 @@ public class PlayerController : MonoBehaviour
 		}
 
 		if (other.gameObject.tag == "Goal") {
-			StartCoroutine ("ExplodeAsGoalEffect");
-			Invoke("Kuppa", 2f);
+			KuppaScene ();
+//			StartCoroutine ("ExplodeAsGoalEffect");
+//			Invoke("Kuppa", 2f);
 		}
-		if (other.gameObject.transform.parent.tag == "Stage") {
+		if (other.gameObject.tag == "Ground") {
 			isGround = true;
 		}
 	}

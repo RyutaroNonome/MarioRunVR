@@ -8,6 +8,7 @@ public class SoundScript : MonoBehaviour {
 	private AudioSource audioSource;
 
 	public PlayerController playerController;
+	public PlayerControllerKuppa playerControllerKuppa;
 
 	// Use this for initialization
 	void Start () {
@@ -20,6 +21,10 @@ public class SoundScript : MonoBehaviour {
 		if (audioSource.isPlaying) {
 			if (playerController.whetherDead ()) {
 				print ("しぼう");
+				audioSource.Stop ();
+			}
+			if (playerControllerKuppa.whetherDead ()) {
+				print ("しぼうKuppa");
 				audioSource.Stop ();
 			}
 //			if (playerController.JumpSound()) {

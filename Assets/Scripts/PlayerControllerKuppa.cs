@@ -1,30 +1,112 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+
+
 public class PlayerControllerKuppa : MonoBehaviour 
 {
+	bool isGround = true;
+	PlayerAngleController pac;
+
 	public float thrust;
 	[SerializeField] Rigidbody rb;
 	public int hp = 1;
 
-	AudioClip getDeadSound;
-	AudioSource deadAudioSource;
 	public GameObject killer;
 
 	GameObject[] killerPositions;
 
+
+	bool isRunning = false;
+
+	bool isDead = false;
+
+	AudioClip getDeadSound;
+	AudioClip getJumpSound;
+
+	AudioSource audioSource;
+
+	Vector3 startPosition;
+
+	enum Achievement {
+		NotYet,
+		FirstPoint,
+		SecondPoint,
+	};
+
+	Achievement achievement;
+	PlayerControllerKuppa playerControllerKuppa;
+
 	void Start() 
 	{
+		pac = GetComponent<PlayerAngleController> ();
+
+		startPosition = new Vector3 (0, 1.7f, 2);
+
 		rb = GetComponent<Rigidbody>();
-		getDeadSound = Resources.Load<AudioClip>("Audio/dead.oggvorbis");
-		deadAudioSource = this.GetComponent<AudioSource>();
+
+		killerPositions = GameObject.FindGameObjectsWithTag ("Position");
+
+		getDeadSound = Resources.Load<AudioClip>("Audio/dead");
+		getJumpSound = Resources.Load<AudioClip>("Audio/jump");
+
+		audioSource = this.GetComponent<AudioSource>();
+
+		Vector3 goal1 = transform.position + (new Vector3 (0, 1.7f, 41f));
+		Vector3 goal2 = transform.position + (new Vector3 (0, 1.7f, 69f));
+
+		switch (achievement) {
+		case Achievement.FirstPoint:
+			this.transform.position = goal1;
+			break;
+		case Achievement.SecondPoint:
+			this.transform.position = goal2;
+			break;
+		default:
+			break;
+		}
+		playerControllerKuppa = GetComponent<PlayerControllerKuppa> ();
 	}
 
 	void Update() {
 		if (this.transform.position.y < -4) {
-			deadAudioSource.PlayOneShot(getDeadSound);
-			Invoke ("ResetGameScene1", getDeadSound.length);
+			isDead = true;
+			audioSource.PlayOneShot(getDeadSound);
+			Invoke ("MainScene", getDeadSound.length);
 		}
+
+		if (this.transform.position.z > 20 && this.transform.position.z < 80) {
+			if (SceneManager.GetActiveScene ().name == "Main") {
+				StartCoroutine ("GenerateKiller");
+			}
+		}
+
+		// if achieved first point once
+		if (this.transform.position.z >= 42f) {
+			achievement = Achievement.FirstPoint;
+		}
+		if (this.transform.position.z >= 70f) {
+			achievement = Achievement.SecondPoint;
+		}
+		if (isGround == true && Input.GetKeyDown (KeyCode.Space)) {
+			playerControllerKuppa.JumpSound ();
+			isGround = false;
+		}
+	}
+
+	IEnumerator GenerateKiller () {
+		if (isRunning) {
+			yield break;
+		}
+
+		int key = Random.Range (0, killerPositions.Length);
+		Instantiate (
+			killer,
+			killerPositions[key].transform.position,
+			Quaternion.identity
+		);
+		isRunning = true;
+		yield return new WaitForSeconds (6f);
 	}
 
 	void FixedUpdate() 
@@ -35,11 +117,13 @@ public class PlayerControllerKuppa : MonoBehaviour
 	}
 
 	void OnCollisionEnter(Collision other){
-		if (other.gameObject.name == "RightLeg(KuribouBody)" || other.gameObject.name == "PakkunBody" || other.gameObject.name == "Dossun") {
+		if (other.gameObject.name == "KuribouCollider" || other.gameObject.name == "PakkunBody" || other.gameObject.name == "Dossun") {
 			hp--;
 			if (hp == 0) {
-				deadAudioSource.PlayOneShot(getDeadSound);
-				Invoke ("ResetGameScene", getDeadSound.length);
+				pac.enabled = false;
+				isDead = true;
+				audioSource.PlayOneShot(getDeadSound);
+				Invoke ("MainScene", getDeadSound.length);
 			} else {
 				this.transform.localScale -= new Vector3 (0.0f, 0.3f, 0.0f);
 				this.transform.position -= new Vector3 (0.0f, 0.2f, 0.0f);
@@ -52,16 +136,30 @@ public class PlayerControllerKuppa : MonoBehaviour
 		}
 
 		if (other.gameObject.tag == "Goal") {
+//			KuppaScene ();
 			StartCoroutine ("ExplodeAsGoalEffect");
+			Invoke("Exit", 3f);
+		}
+		if (other.gameObject.transform.parent.tag == "Stage") {
+			isGround = true;
 		}
 	}
 
-	void ResetGameScene () {
-		Application.LoadLevel(0);
+	void MainScene () {
+		SceneManager.LoadScene ("Kuppa");
 	}
 
-	void ResetGameScene1 () {
-		Application.LoadLevel (1);
+	void KuppaScene () {
+		SceneManager.LoadScene ("Kuppa");
+	}
+
+	void ResetGameScene () {
+		pac.enabled = true;
+		Achievement tmp1 = achievement;
+
+		this.transform.position = startPosition;
+
+		achievement = tmp1;
 	}
 
 	IEnumerator ExplodeAsGoalEffect () {
@@ -74,16 +172,29 @@ public class PlayerControllerKuppa : MonoBehaviour
 	}
 
 	void OnTriggerEnter(Collider other){
-		print (other.gameObject.name);
 		if (other.gameObject.name == "Dossun") {
 			hp--;
 			if (hp == 0) {
-				deadAudioSource.PlayOneShot(getDeadSound);
-				Invoke ("ResetGameScene", getDeadSound.length);
+				isDead = true;
+				audioSource.PlayOneShot(getDeadSound);
+				Invoke ("MainScene", getDeadSound.length);
 			} else {
 				this.transform.localScale -= new Vector3 (0.0f, 0.3f, 0.0f);
 				this.transform.position -= new Vector3 (0.0f, 0.2f, 0.0f);
 			}
 		}
+	}
+
+	public void JumpSound () {
+		audioSource.PlayOneShot(getJumpSound);
+	}
+
+	public bool whetherDead () {
+		return isDead;
+	}
+
+	void Exit(){
+		print ("aaaa");
+		Application.Quit();
 	}
 }

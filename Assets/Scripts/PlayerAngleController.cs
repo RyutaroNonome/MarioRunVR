@@ -33,7 +33,7 @@ public class PlayerAngleController : MonoBehaviour {
 		//// 9行目と11行目で取得した角度の差でJUMPを実装
 		float angleDifference = divecamera.transform.localRotation.eulerAngles.x - playerXangle;
 		playerXangle = divecamera.transform.localRotation.eulerAngles.x;
-
+		print ("aaaaaaaaaaaa");
 		transform.position += new Vector3 (0, 0, 2f * Time.deltaTime);
 
 		// positionY で常に現在地(Y座標)を記憶
